@@ -1,11 +1,19 @@
 <script>
 	import { afterUpdate } from 'svelte';
+	import { stores } from '@sapper/app';
 	import { Icon } from '@sveltejs/site-kit';
+
 	export let recipes = [];
-	export let active_section = null;
+	export let active_recipe = null;
 	export let show_contents;
 	export let prevent_sidebar_scroll = false;
-  let ul;
+	let ul;
+
+	const { page } = stores();
+
+	$: segment = $page.path.split('/')[2];
+
+	//$: console.log('recipe:', active_recipe, recipes)
 
 	afterUpdate(() => {
 		// bit of a hack — prevent sidebar scrolling if
@@ -39,7 +47,7 @@
 	.reference-toc li {
 		display: block;
 		line-height: 1.2;
-		margin: 0 0 4rem 0;
+		margin: 1rem 0 1rem 0;
 	}
 	a {
 		position: relative;
@@ -48,6 +56,7 @@
 		padding: 0;
 		color: var(--second);
 	}
+
 	.section {
 		display: block;
 		padding: 0 0 .8rem 0;
@@ -62,6 +71,11 @@
 		font-family: var(--font);
 		padding: 0 0 0.6em 0;
 	}
+
+	.subsection:last-child {
+		padding-bottom: 2em;
+	}
+
 	.section:hover,
 	.subsection:hover,
 	.active {
@@ -96,33 +110,34 @@
 >
 	{#each recipes as recipe}
 		<li>
-			<a class="section" class:active="{recipe.slug === active_section}" href="cookbook/{recipe.slug}">
+			<a class="section" class:active="{recipe.slug === active_recipe}" href="cookbook/{recipe.slug}">
 				{@html recipe.metadata.title}
 
-				{#if recipe.slug === active_section}
+				{#if recipe.slug === active_recipe}
 					<div class="icon-container">
 						<Icon name="arrow-right" />
 					</div>
 				{/if}
 			</a>
+			{#if segment === recipe.slug}
+				{#each recipe.subsections as subsection}
+					<!-- see <script> below: on:click='scrollTo(event, subsection.slug)' -->
+					<a
+						class="subsection"
+						class:active="{subsection.slug === active_recipe}"
+						href="cookbook/{recipe.slug}#{subsection.slug}"
+						data-level="{subsection.level}"
+					>
+						{@html subsection.title}
 
-			<!-- {#each section.subsections as subsection}
-				<!-- see <script> below: on:click='scrollTo(event, subsection.slug)'
-				<a
-					class="subsection"
-					class:active="{subsection.slug === active_section}"
-					href="docs#{subsection.slug}"
-					data-level="{subsection.level}"
-				>
-					{@html subsection.title}
-
-					{#if subsection.slug === active_section}
-						<div class="icon-container">
-							<Icon name="arrow-right" />
-						</div>
-					{/if}
-				</a>
-			{/each} -->
+						{#if subsection.slug === active_recipe}
+							<div class="icon-container">
+								<Icon name="arrow-right" />
+							</div>
+						{/if}
+					</a>
+				{/each}
+			{/if}
 		</li>
 	{/each}
 </ul>

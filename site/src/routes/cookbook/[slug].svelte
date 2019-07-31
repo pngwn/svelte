@@ -8,7 +8,6 @@
 <script>
 	import Recipe from './_Recipe.svelte';
 	export let recipe;
-	$: console.log(recipe)
 </script>
 
 <svelte:head>

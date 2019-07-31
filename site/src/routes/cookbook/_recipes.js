@@ -47,7 +47,6 @@ export default function () {
 		.readdirSync(`content/cookbook`)
 		.filter(file => file[0] !== '.' && path.extname(file) === '.md')
 		.map(file => {
-			console.log(file)
 			const markdown = fs.readFileSync(`content/cookbook/${file}`, 'utf-8');
 
 			const { content, metadata } = extract_frontmatter(markdown);
@@ -110,7 +109,7 @@ export default function () {
 
 			renderer.heading = (text, level, rawtext) => {
 				let slug;
-
+				console.log(text, level)
 				const match = /<a href="([^"]+)">(.+)<\/a>/.exec(text);
 				if (match) {
 					slug = match[1];
@@ -119,7 +118,7 @@ export default function () {
 					slug = make_slug(rawtext);
 				}
 
-				if (level === 3 || level === 4) {
+				if (level === 2 || level === 3) {
 					const title = text
 						.replace(/<\/?code>/g, '')
 						.replace(/\.(\w+)(\((.+)?\))?/, (m, $1, $2, $3) => {
@@ -130,10 +129,10 @@ export default function () {
 
 					subsections.push({ slug, title, level });
 				}
-				console.log(section_slug, slug)
+
 				return `
 					<h${level}>
-						<span id="${slug}" class="offset-anchor" ${level > 4 ? 'data-scrollignore' : ''}></span>
+						<span id="${slug}" class="offset-anchor" ${level > 3 ? 'data-scrollignore' : ''}></span>
 						<a href="cookbook/${section_slug}#${slug}" class="anchor" aria-hidden="true"></a>
 						${text}
 					</h${level}>`;
@@ -149,7 +148,7 @@ export default function () {
 			const html = marked(content, { renderer });
 
 			const hashes = {};
-			// console.log(subsections, section_slug, file)
+
 			return {
 				html: html.replace(/@@(\d+)/g, (m, id) => hashes[id] || m),
 				metadata,
