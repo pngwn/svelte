@@ -3,34 +3,83 @@ title: Stores
 description: Getting the most out of Svelte stores.
 ---
 
-Stores are one of the more powerful and flexible features in Svelte 3 but often theur super-powers go unnappreciated. In this episode of *The Tiniest Kitchen* we will explore take a deep-dive into Svelte Stores and unearth their most closely held secrets.
+*This guide assumes you understand the basics of Svelte Stores. If you aren't familiar with them then working through the [relevant tutorial](tutorial/writable-stores) and reading the [store documentation](http://localhost:3000/docs#svelte_store) are highly recomended.*
 
-## They are just bananas
+Svelte stores offer a simple mechanism to handle shared state in your Svelte application but looking beyond the built-in store implementations will unlock a whole world of power that you could never have dreamed of. In this episode of *The Tinest Kitchen* we'll take a close look at [The Store Contract](#The_Store_Contract), learn how to implement [Custom Stores](#Custom_Stores), by making use of the built in store API, and explore how we can implement [a completely custom store]() without using the built-in stores at all.
 
-Svelte stores are just bananas: within lies a delicious morsel but for reasons of practicality, they stay wrapped while in transit. Svelte stores are also not like bananas because keeping the value wrapped is very simple. I don't know if you have ever tried to unpeel a banana.
+## The store contract
 
-In svelte you can easily access the value inside of a store by adding a `$` to the front of the store's variable name, this allows you to reference the store value rather than the store object itself (which contains a bunch of stuff that we will cover later).
+The built-in Svelte stores (`readable`, `writable`, and `derived`) are just store *implementations* and while the are perfectly capable of handling many tasks, sometimes you need something more specific. Although often overlooked, the store *contract* is what gives these stores their power and flexibility. Without this contract, svelte stores would be awkward to use and require significant amounts of boilerplate.
 
-```sv
-<script>
-  import { writable } from 'svelte/store';
+Svelte does not compile your javascript files and, as such, the contract is only obsered inside Svelte components.
 
-  // A store which is actually an object with some methods
-  const my_store = writable('a banana');
-</script>
+### `store.subscribe`
 
-<!-- The actual value -->
-<p>{$my_store}</p>
+At its simplest, the store contract is this: any time Svelte sees a variable prepended with `$` in a Svelte component (such as `$store`) it will call the `subscribe` method of that variable. The `subscribe` method must take a single argument which is a function and it must *return* a function that allows any subscribers to unsubscribe when necessary. The callback function must be passed the current store value as an argument whenever it is called. The callback passed to subscribe should be called immediately when subscribing and anytime the store value changes.
+
+The following examples aren't the *exact* code Svelte will produce, rather simplified examples to illustrate the behaviour.
+
+This:
+
+```js
+import { my_store } from './store.js';
+
+console.log($my_store);
 ```
 
-In the above example `my_store` refers to the store object, `$my_store` refers to the actual value contained with the store.
+Becomes something like this:
 
-## I have too many bananas!
+```js
+import { my_store } from './store.js';
 
-When you have a great deal of bananas—say, a thousand—things can get a bit tricky. The solution is, of course, to put all of the bananas into a single skin. You may have noticed that the banana metaphor has completely broken down. I have made a terrible mistake.
+let $my_store;
+const unsubscribe = my_store.subscribe((value) => $my_store = value);
+onDestroy(unsubscribe);
 
-## The Contract <sup>TM</sup>
+console.log($my_store);
+```
 
-## A banana split
+The callback function that was passed to `my_store.subscribe` will be called immediately and whenever the store value changes. Here, Svelte has automatically produced some code to assign the `my_store` value to `$my_store` whenever it is called. If this `$my_store` is referenced in the component it will also cause those parts of the component to update when the store value changes. When the component is destroyed, Svelte calls the unsubscribe function that is returned from `my_store.subscribe`.
+
+### `store.set`
+
+Optionally, a store can have a `set` method. Whenever there is an assignment to a variable prepended with `$` in a Svelte component it will call the `set` method of that variable with newly mutated or reassigned `$variable` as an argument. Normally, this `set` argument should update the store value and call all subscribers but this is not required. For example, Svelte's `tweened` and `spring` stores do not immediately update their values but rather schedule updates on every frame for as long as the animation lasts. If you decide to take this approach with `set` we advise not [binding](tutorial/store-bindings) to these stores as the behaviour could be unpredictable.
+
+This:
+
+```js
+	$my_store = 'Hello';
+```
+
+Will become something like:
+
+```js
+$my_store = 'Hello';
+my_store.set($my_store);
+```
+
+The same is true when assigning to nested properties of a store.
+
+This:
+
+```js
+	$my_store.greeting = 'Hello';
+```
+
+Becomes:
+
+```js
+$my_store.greeting = 'Hello';
+my_store.set($my_store);
+```
+
+Although Svelte's built in stores also have an `update` method, this is not part of the contract and is not required to benefit from the automatic subscriptions, unsubscriptions, and updates that the store contract provides. Stores can have as many additional methods as you like, allowing you to build powerful abstractions that take advantage of the automatic reactivity and cleanup that the store contract provides.
+
+To summarise, the store contract states that svelte stores must be an object containg the following methods:
+
+- `subscribe` - Automatically called whenever svelte sees a `$` prepended variable (like `$store`) ensuring that the `$` prepended value always has the current store value. Subscribe must accept a function which is called both immediately and whenever the store value changes, it must return and unsubscribe function. The callback function must be passed the current store value as an argument whenever it is called.
+- `set` - Automatically called whenever Svelte sees an assignment to a `$` prepended variable (like `$store = 'value'`). This shoudl normally update teh store value and call all subscribers.
+
+## Custom stores
 
 ## A really special banana
