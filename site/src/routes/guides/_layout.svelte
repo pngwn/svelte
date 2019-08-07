@@ -1,7 +1,7 @@
 <script context="module">
 	export async function preload() {
     console.log('before fetch')
-    const recipes = await this.fetch(`cookbook.json`).then(r => r.json());
+    const recipes = await this.fetch(`guides.json`).then(r => r.json());
     console.log('recipes: ', recipes)
 		return { recipes };
 	}
@@ -17,7 +17,7 @@
 
 
 	export let project = 'svelte';
-	export let dir = 'cookbook';
+	export let dir = 'guides';
 	export let recipes;
 	let active_recipe;
 	let container;

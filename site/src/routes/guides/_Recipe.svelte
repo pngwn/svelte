@@ -1,8 +1,8 @@
 <script>
-  import { Icon } from '@sveltejs/site-kit';
-  export let recipe;
-  export let project = 'svelte';
-  export let dir = 'cookbook';
+	import { Icon } from '@sveltejs/site-kit';
+	export let recipe;
+	export let project = 'svelte';
+	export let dir = 'guides';
 </script>
 
 <style>
@@ -10,6 +10,15 @@
 		padding: var(--top-offset) var(--side-nav) 6rem var(--side-nav);
 		max-width: var(--main-width);
 		margin: 0 auto;
+
+		width: 100%;
+		margin: 0;
+		padding: var(--top-offset) var(--side-nav);
+		tab-size: 2;
+		-moz-tab-size: 2;
+	}
+
+	.content {
 	}
 
 	h1 {
@@ -45,7 +54,7 @@
 	section h1 {
 		color: var(--second);
 		max-width: 20em;
-		margin: 0 0 .8rem 0;
+		margin: 0 0 0.8rem 0;
 	}
 
 	section :global(h2) {
@@ -81,9 +90,9 @@
 	}
 
 	section :global(code) {
-		padding: .3rem .8rem .3rem;
+		padding: 0.3rem 0.8rem 0.3rem;
 		margin: 0 0.2rem;
-		top: -.1rem;
+		top: -0.1rem;
 		background: var(--back-api);
 	}
 
@@ -146,20 +155,21 @@
 		opacity: 1;
 	}
 
-
 	@media (max-width: 768px) {
 		section :global(.anchor) {
 			transform: scale(0.6);
 			opacity: 1;
 			top: calc((1em - 0.6 * 24px) / 2);
-			left: -1.0em;
+			left: -1em;
 		}
 	}
 
 	@media (min-width: 910px) {
 		section :global(.max) {
-			width: calc(100vw - 2 * var(--side-nav));
-			margin: 0 calc(var(--main-width) / 2 - 50vw);
+			width: calc(
+				100vw - (var(--sidebar-w) + var(--side-nav) * 2 + var(--side-nav) * 2)
+			);
+			margin: 0;
 			text-align: center;
 		}
 
@@ -179,16 +189,16 @@
 		display: inline-block;
 		/* background: var(--back-api); */
 		color: white;
-		padding: .3rem .8rem;
+		padding: 0.3rem 0.8rem;
 		margin: 0;
 		max-width: 100%;
 	}
-	section > :global(.code-block)> :global(pre.language-markup) {
-		padding: .3rem .8rem .2rem;
+	section > :global(.code-block) > :global(pre.language-markup) {
+		padding: 0.3rem 0.8rem 0.2rem;
 		background: var(--back-api);
 	}
 	section > :global(p) {
-		max-width: var(--linemax)
+		max-width: var(--linemax);
 	}
 	section :global(p) {
 		margin: 1em 0;
@@ -201,8 +211,12 @@
 		cursor: pointer;
 	}
 	/* no linkify on these */
-	small a        { all: unset }
-	small a:before { all: unset }
+	small a {
+		all: unset;
+	}
+	small a:before {
+		all: unset;
+	}
 	section :global(blockquote) {
 		color: hsl(204, 100%, 50%);
 		border: 2px solid var(--flash);
@@ -219,13 +233,15 @@
 
 <section data-id={recipe.slug}>
 	<h1>
-		<span class="offset-anchor" id={recipe.slug}></span>
-		<a href="cookbook/{recipe.slug}" class="anchor" aria-hidden></a>
+		<span class="offset-anchor" id={recipe.slug} />
+		<a href="guides/{recipe.slug}" class="anchor" aria-hidden />
 
 		{@html recipe.metadata.title}
 		<small>
-			<a href="https://github.com/sveltejs/{project}/edit/master/site/content/{dir}/{recipe.file}" title="edit this section">
-				<Icon name='edit' />
+			<a
+				href="https://github.com/sveltejs/{project}/edit/master/site/content/{dir}/{recipe.file}"
+				title="edit this section">
+				<Icon name="edit" />
 			</a>
 		</small>
 	</h1>

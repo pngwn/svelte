@@ -59,7 +59,7 @@
 
 	.section {
 		display: block;
-		padding: 0 0 .8rem 0;
+		padding: 0 0 1.8rem 0;
 		font-size: var(--h6);
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
@@ -81,7 +81,7 @@
 	.active {
 		color: var(--flash);
 	}
-	.subsection[data-level="4"] {
+	.subsection[data-level="3"] {
 		padding-left: 1.2rem;
 	}
 	.icon-container {
@@ -110,7 +110,7 @@
 >
 	{#each recipes as recipe}
 		<li>
-			<a class="section" class:active="{recipe.slug === active_recipe}" href="cookbook/{recipe.slug}">
+			<a class="section" class:active="{recipe.slug === active_recipe}" href="guides/{recipe.slug}">
 				{@html recipe.metadata.title}
 
 				{#if recipe.slug === active_recipe}
@@ -125,7 +125,7 @@
 					<a
 						class="subsection"
 						class:active="{subsection.slug === active_recipe}"
-						href="cookbook/{recipe.slug}#{subsection.slug}"
+						href="guides/{recipe.slug}#{subsection.slug}"
 						data-level="{subsection.level}"
 					>
 						{@html subsection.title}

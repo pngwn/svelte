@@ -10,10 +10,10 @@
 </script> -->
 
 <svelte:head>
-	<title>Cookbook • Svelte</title>
-	<link rel="alternate" type="application/rss+xml" title="Svelte cookbook" href="blog/rss.xml">
+	<title>Guides • Svelte</title>
+	<link rel="alternate" type="application/rss+xml" title="Svelte Guides" href="blog/rss.xml">
 
-	<meta name="twitter:title" content="Svelte Cookbook">
+	<meta name="twitter:title" content="Svelte Guides">
 	<meta name="twitter:description" content="Delicious Recipes for Svelte">
 	<meta name="Description" content="Delicious Recipes for Svelte">
 </svelte:head>

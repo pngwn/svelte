@@ -1,28 +1,33 @@
 import fs from 'fs';
 import path from 'path';
 import { SLUG_PRESERVE_UNICODE, SLUG_SEPARATOR } from '../../../config';
-import { extract_frontmatter, extract_metadata, langs, link_renderer } from '@sveltejs/site-kit/utils/markdown.js';
+import {
+	extract_frontmatter,
+	extract_metadata,
+	langs,
+	link_renderer,
+} from '@sveltejs/site-kit/utils/markdown.js';
 import { make_session_slug_processor } from '@sveltejs/site-kit/utils/slug';
 import marked from 'marked';
 import PrismJS from 'prismjs';
 import 'prismjs/components/prism-bash';
 
-const escaped = {
-	'"': '&quot;',
-	"'": '&#39;',
-	'&': '&amp;',
-	'<': '&lt;',
-	'>': '&gt;',
-};
+// const escaped = {
+// 	'"': '&quot;',
+// 	"'": '&#39;',
+// 	'&': '&amp;',
+// 	'<': '&lt;',
+// 	'>': '&gt;',
+// };
 
-const unescaped = Object.keys(escaped).reduce(
-	(unescaped, key) => ((unescaped[escaped[key]] = key), unescaped),
-	{}
-);
+// const unescaped = Object.keys(escaped).reduce(
+// 	(unescaped, key) => ((unescaped[escaped[key]] = key), unescaped),
+// 	{}
+// );
 
-function unescape(str) {
-	return String(str).replace(/&.+?;/g, match => unescaped[match] || match);
-}
+// function unescape(str) {
+// 	return String(str).replace(/&.+?;/g, match => unescaped[match] || match);
+// }
 
 const blockTypes = [
 	'blockquote',
@@ -34,20 +39,20 @@ const blockTypes = [
 	'paragraph',
 	'table',
 	'tablerow',
-	'tablecell'
+	'tablecell',
 ];
 
 export default function () {
 	const make_slug = make_session_slug_processor({
 		preserve_unicode: SLUG_PRESERVE_UNICODE,
-		separator: SLUG_SEPARATOR
+		separator: SLUG_SEPARATOR,
 	});
 
 	return fs
-		.readdirSync(`content/cookbook`)
+		.readdirSync(`content/guides`)
 		.filter(file => file[0] !== '.' && path.extname(file) === '.md')
 		.map(file => {
-			const markdown = fs.readFileSync(`content/cookbook/${file}`, 'utf-8');
+			const markdown = fs.readFileSync(`content/guides/${file}`, 'utf-8');
 
 			const { content, metadata } = extract_frontmatter(markdown);
 
@@ -109,7 +114,6 @@ export default function () {
 
 			renderer.heading = (text, level, rawtext) => {
 				let slug;
-				console.log(text, level)
 				const match = /<a href="([^"]+)">(.+)<\/a>/.exec(text);
 				if (match) {
 					slug = match[1];
@@ -132,8 +136,10 @@ export default function () {
 
 				return `
 					<h${level}>
-						<span id="${slug}" class="offset-anchor" ${level > 3 ? 'data-scrollignore' : ''}></span>
-						<a href="cookbook/${section_slug}#${slug}" class="anchor" aria-hidden="true"></a>
+						<span id="${slug}" class="offset-anchor" ${
+					level > 3 ? 'data-scrollignore' : ''
+					}></span>
+						<a href="guides/${section_slug}#${slug}" class="anchor" aria-hidden="true"></a>
 						${text}
 					</h${level}>`;
 			};
