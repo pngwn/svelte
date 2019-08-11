@@ -1,4 +1,4 @@
 ---
 title: Testing
-description: Testing SVelte components.
+description: Testing Svelte components.
 ---

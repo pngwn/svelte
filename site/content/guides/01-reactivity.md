@@ -28,7 +28,7 @@ The following works as expected and update the dom:
 
 Svelte can see that there is an assignment to a top-level variable and knows to rerender after the `num` variable is modified.
 
-### each blocks
+### `each` blocks
 
 The only exception to the top-level variable rule is when you are inside an `each` block. Any assignments to variables inside an `each` block trigger an update. Only assignments to array items that are objects or arrays result in the array itself updating. If the array items are primitives, the change is not traced back to the original array. This is because Svelte only reassigns the actual array items and primitives are passed by value in javascript, not by reference.
 
@@ -80,7 +80,7 @@ This is the sort of problem you may run into when dealing with objects. Since ob
 
 In this example, when we reassign `o.num` we are updating the value assigned to `obj` but since we are not updating the actual `obj` variable SVelte does not trigger an update. Svelte does not trace these kinds of values back to a variable defined at the top level and has no way of knowing if it has updated or not. Whenever you want to update the local component state, any reassignments must be performed on the *actual* variable, not just the value itself.
 
-### shadowed variables
+### Shadowed variables
 
 Another situation that can sometimes cause unexpected results is when you reassign a function's parameter (as above), and that parameter has the same *name* as a top-level variable.
 
@@ -99,9 +99,9 @@ Another situation that can sometimes cause unexpected results is when you reassi
 <p>{num}</p>
 ```
 
-This example behaves the same as the previous example, except it is perhaps even more confusing. In this case, the `obj` variable is being *shadowed* while inside the function, so any assignments to `obj` inside this are assignments to the function parameter rather than the top-level `obj` variable. It refers to the same value, and it has the same name, but it is a *different* variable inside the function scope.
+This example behaves the same as the previous example, except it is perhaps even more confusing. In this case, the `obj` variable is being *shadowed* while inside the function, so any assignments to `obj` inside this function are assignments to the function parameter rather than the top-level `obj` variable. It refers to the same value, and it has the same name, but it is a *different* variable inside the function scope.
 
-Reassigning function parameters in this way is the same as reassigning a variable that points back to the top-level variable's value and does not cause an update. To avoid these problems, and potential confusion, it is a good idea not to reuse variable names in different scopes () such as inside functions, and always make sure that you are reassigning a top-level variable.
+Reassigning function parameters in this way is the same as reassigning a variable that points back to the top-level variable's value and does not cause an update. To avoid these problems, and potential confusion, it is a good idea not to reuse variable names in different scopes (such as inside functions), and always make sure that you are reassigning a top-level variable.
 
 
 ## Reactive Declarations
@@ -198,7 +198,6 @@ since `$: const { value } = object` is not valid javascript, we need to take a d
 
 To achieve this, all we need to do is wrap the declaration with parentheses:
 
-```
 ```js
 let some_obj = { one: 1, two: 2, three: 3 }
 

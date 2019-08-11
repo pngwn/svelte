@@ -1,8 +1,6 @@
 <script context="module">
 	export async function preload() {
-    console.log('before fetch')
     const recipes = await this.fetch(`guides.json`).then(r => r.json());
-    console.log('recipes: ', recipes)
 		return { recipes };
 	}
 </script>
@@ -40,6 +38,7 @@
 	const calculate_anchors = async () => {
 		removeListeners();
 		await tick();
+		if (!container) return;
 		// don't update `active_section` for headings above level 4, see _sections.js
 		const anchors = container.querySelectorAll('[id]:not([data-scrollignore])');
 		let positions;
@@ -191,19 +190,6 @@
 			padding: 1em 0;
 		}
 	}
-	/* .content h2 {
-		margin-top: 8rem;
-		padding: 2rem 1.6rem 4rem 0.2rem;
-		border-top: var(--border-w) solid #6767785b;
-		color: var(--text);
-		line-height: 1;
-		font-size: var(--h3);
-		letter-spacing: .05em;
-		text-transform: uppercase;
-	} */
-	/* .content section:first-of-type > h2 {
-		margin-top: 0;
-	} */
 	.content :global(h4) {
 		margin: 2em 0 1em 0;
 	}
@@ -241,35 +227,34 @@
 	}
 	.content :global(h3),
 	.content :global(h3 > code) {
-		margin: 6.4rem 0 0 0;
-		padding: 2rem 1.6rem 5.6rem .2rem;
-		color: var(--text);
-		border-top: var(--border-w) solid #6767781f; /* based on --second */
-		background: transparent;
-		line-height: 1;
+		margin: -0.6rem 0 0 0;
+    padding: 3.4rem 1.6rem 0.6rem .2rem;
+    color: var(--text);
+    background: transparent;
+    line-height: 1;
+    font-size: 2.3rem;
 	}
-	.content :global(h3):first-of-type {
-		border: none;
-		margin: 0;
-	}
+
 	/* avoid doubled border-top */
 	.content :global(h3 > code) {
-		border-radius: 0 0 0 0;
-		border: none;
-		font-size: inherit;
+    border-radius: 2px;
+    font-size: 1.8rem;
+    padding: .3rem .8rem .3rem;
+    margin: 0;
+    background: var(--back-api);
 	}
 	.content :global(h4),
 	.content :global(h4 > code) {
 		font-family: inherit;
-		font-weight: 600;
-		font-size: 2.4rem;
-		color: var(--second);
-		margin: 6.4rem 0 1.6rem 0;
-		padding-left: 0;
-		background: transparent;
-		line-height: 1;
-		padding: 0;
-		top: 0;
+    font-weight: 600;
+    font-size: 2rem;
+    color: var(--second);
+    margin: 3.4rem 0 1.6rem 0;
+    padding-left: 0;
+    background: transparent;
+    line-height: 1;
+    padding: 0;
+    top: 0;
 	}
 	.content :global(h4 > em) {
 		opacity: 0.7;

@@ -7,6 +7,6 @@ description: Add routing to your Svelte application
 
 ## Different approaches
 
-## XML-Inspired Routing
+## XML-stylee
 
-## Express-inspired Routing
+## Express-stylee

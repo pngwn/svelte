@@ -18,7 +18,7 @@
 	afterUpdate(() => {
 		// bit of a hack — prevent sidebar scrolling if
 		// TOC is open on mobile, or scroll came from within sidebar
-		if (prevent_sidebar_scroll || show_contents && window.innerWidth < 832) return;
+		if (prevent_sidebar_scroll || show_contents && window.innerWidth < 832 || !ul) return;
 		const active = ul.querySelector('.active');
 		if (active) {
 			const { top, bottom } = active.getBoundingClientRect();
