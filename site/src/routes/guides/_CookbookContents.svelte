@@ -13,7 +13,6 @@
 
 	$: segment = $page.path.split('/')[2];
 
-	//$: console.log('recipe:', active_recipe, recipes)
 
 	afterUpdate(() => {
 		// bit of a hack — prevent sidebar scrolling if
@@ -40,7 +39,6 @@
 		}
   });
 
-  $: console.log(recipes)
 </script>
 
 <style>

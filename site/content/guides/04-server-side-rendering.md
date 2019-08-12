@@ -12,3 +12,5 @@ description: Rendering Svelte components on the server.
 ## About
 
 ## SSR
+
+<!-- I actually implemented some SSR for Svelte yesterday, so i'm basically an expert now -->

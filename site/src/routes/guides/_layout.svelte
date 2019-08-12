@@ -225,6 +225,19 @@
 			top: 0.2em;
 		}
 	}
+
+	.content :global(h2 > code) {
+		margin: -0.6rem 0 0 0;
+    padding: 3.4rem 1.6rem 0.6rem .2rem;
+    color: var(--text);
+    line-height: 1;
+    font-size: 2.3rem;
+		border-radius: 2px;
+    padding: .3rem .8rem .3rem;
+    margin: 0;
+    background: var(--back-api);
+	}
+
 	.content :global(h3),
 	.content :global(h3 > code) {
 		margin: -0.6rem 0 0 0;

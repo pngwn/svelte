@@ -18,9 +18,6 @@
 		-moz-tab-size: 2;
 	}
 
-	.content {
-	}
-
 	h1 {
 		font-size: 4rem;
 		font-weight: 400;
@@ -32,23 +29,6 @@
 		margin: 0 0 1em 0;
 		padding: 0 0 1em 0;
 		border-bottom: var(--border-w) solid #6767785b;
-	}
-
-	.byline {
-		margin: 0 0 6rem 0;
-		padding: 1.6rem 0 0 0;
-		border-top: var(--border-w) solid #6767785b;
-		font-size: var(--h6);
-		text-transform: uppercase;
-	}
-
-	.byline a {
-		/* border-bottom: none; */
-		/* font-weight: 600; */
-	}
-
-	.byline a:hover {
-		/* border-bottom: 2px solid var(--prime); */
 	}
 
 	section h1 {
